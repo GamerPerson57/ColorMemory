@@ -1,6 +1,8 @@
 // import from tool box
 import { Toolbox } from "./toolbox.js";
 
+let selectedCards = [];
+
 // exports memorybutton
 export class MemoryButton {
 
@@ -45,13 +47,28 @@ export class MemoryButton {
         let isClickInButton = this.toolbox.isWithinRect(
             clickX, clickY, this.x, this.y, this.width, this.height
         );
+        
+        if(isClickInButton && !this.isFaceUp) {
+            this.isFaceUp = true;
+            selectedCards.push(this);
 
-        if(isClickInButton) {
-            this.isFaceUp = !this.isFaceUp;
+            if (selectedCards.length == 2) {
+                if (selectedCards[0].color == selectedCards[1].color) {
+                    console.log("It's a match!");
+                    selectedCards = [];
+                } else {
+                    console.log("Not a match!");
+                    setTimeout(() => {
+                        selectedCards[0].isFaceUp = false;
+                        selectedCards[1].isFaceUp = false;
+                        selectedCards = [];
+                    }, 1000); // adds a short delay so player sees the mismatch
+                }
+            }
         }
+
     }
 
-    
     
     
 
